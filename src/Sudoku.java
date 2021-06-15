@@ -14,24 +14,31 @@ public class Sudoku {
         for (int[] row:board)
             Arrays.fill(row,0);
     }
+    /**
+     * @return Boolean
+     * Recursively
+     * */
     public boolean fillboard(){
         for (int i = 0;i<9;i++){
             for (int j = 0;j<9;j++){
                 //if value is 0, we need to fill it
                 if (board[i][j]==0){
-                    //loop through array seed
+                    //loop through array list seed
+                    //which has been shuffled to ensure randomness of the game
                     for (int k:seed){
                         //check if value can be put into the board,
                         //checkCol checkRow and checkSub
                         if (validPut(i,j,k)){
                             //if valid
-                            //repalce it
+                            //repalce it as k
                             board[i][j] = k;
+                            //recursive
                             if (fillboard())
                                 return true;
                             else
                                 //if not continue
-                                board[i][j] = 0;}
+                                board[i][j] = 0;
+                        }
                     }
                     return false;//not yet, continue running
                 }
@@ -100,13 +107,19 @@ public class Sudoku {
      * After generate correspond game board, print it using nested loop
      * */
     public void printBoard(String difficulty){
+        System.out.println("Solution:");
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++)
+                System.out.print(" " + board[i][j]);
+            System.out.print("\n");
+        }
         if (difficulty=="Easy")
             puzzleGenerator(81*0.56);
         else if (difficulty=="Medium")
             puzzleGenerator(81*0.62);
         else if (difficulty== "Hard")
             puzzleGenerator(81*0.7);
-
+        System.out.println("Puzzle:");
         for (int i = 0; i < 9; i++) {
             for (int j = 0; j < 9; j++)
                 System.out.print(" " + board[i][j]);
@@ -131,14 +144,12 @@ public class Sudoku {
                 board[row][col] = 0;
         }
     }
-    
+
 
     public static void main(String[] args) {
         Sudoku s = new Sudoku();
-        if (s.fillboard()){
-
+        if (s.fillboard())
             s.printBoard("Hard");
-        }
     }
-
 }
+
